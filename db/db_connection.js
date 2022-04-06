@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
-import env from 'dotenv';
+import 'dotenv/config';
 
 const DB_URL = process.env.DB_URL;
 
 export default function db_connected () {
-    mongoose.connect(DB_URL, { useUnifiedTopology:true }, (err) => {
+    mongoose.connect(DB_URL, { useUnifiedTopology:true, autoIndex:false, autoCreate:false}, (err) => {
         if (err) {
             console.log('Connection to database failed')
             return true

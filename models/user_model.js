@@ -1,12 +1,18 @@
 import mongoose from 'mongoose';
 
-const UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
 
-    fname: { type: String, max: 25, min: 3, require: true },
-    lname: { type: String, max: 25, min: 3, require: true },
-    email: { type: Email, max: 125, required: true },
-    password: { type: String, require: true },
+    fname: { type: String, maxlength: 25, min: 3, required: true },
+    lname: { type: String, maxlength: 25, min: 3, required: true },
+    email: { type: String, maxlength: 125, required: true, lowercase:true },
+    password: { type: String, required: true },
     
 });
 
-export const User = mongoose.model('users', UserSchema);
+// custom methods for the model
+// fullname - returns the two names joined
+userSchema.virtual('fullname').get(function () {
+    return (this.fname + ' ' + this.lname)
+});
+
+export const User = mongoose.model('users', userSchema);

@@ -5,8 +5,9 @@ const userSchema = new mongoose.Schema({
     fname: { type: String, maxlength: 25, min: 3, required: true },
     lname: { type: String, maxlength: 25, min: 3, required: true },
     email: { type: String, maxlength: 125, required: true, lowercase:true },
-    password: { type: String, required: true },
-    
+    password: { type: String, required: true},
+    is_admin: { type: Boolean, default: false },
+
 });
 
 // custom methods for the model
@@ -15,4 +16,4 @@ userSchema.virtual('fullname').get(function () {
     return (this.fname + ' ' + this.lname)
 });
 
-export const User = mongoose.model('users', userSchema);
+export const User = mongoose.model('user', userSchema);

@@ -1,9 +1,10 @@
 import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
 import router from "../routes/routes.js";
+import cors from "cors";
 
 export default function appMiddleware(app) {
-    app.use(bodyParser.json());
-    app.use(cookieParser);
+    app.use(cors())
+    app.use(bodyParser.json({extended:true}));
+    app.use(bodyParser.urlencoded({extended:true}))
     app.use('/', router);
 }

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 // token generated every login, deleted every logout or if found as expired
 const sessionTokenSchema = new mongoose.Schema({
-    key: { type: String, required: true },
+    key: { type: String, required: true }, 
     user_id: { type: String, required: true },
     user_type: { type: String, required: true, enum:['admin','user'], lowercase:true},  //admin or regular user
     expires_in: { type: Number, default: 3600000 }, //1 hour in milliseconds
@@ -24,5 +24,7 @@ sessionTokenSchema.virtual('is_expired', function () {
         return false
     }
 });
+
+sessionTokenSchema.static('findByUserId', function(){return this.findOne({user_id})})
 
 export const Token = mongoose.model('token', sessionTokenSchema);

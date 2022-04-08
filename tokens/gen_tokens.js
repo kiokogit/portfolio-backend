@@ -12,15 +12,14 @@ export const gen_user_token = async(user_id) => {
         } //go ahead and login, or issue new token
         else {
             //submit hashed code
-        const user = await Token.create({
-            key: await bcrypt.hash(uuidv4(), 6),
-            user_id: user_id,
-            user_type: 'user',
-        });
-        return user.key;
+            const user = await Token.create({
+                key: await bcrypt.hash(uuidv4(), 6),
+                user_id: user_id
+            });
+            return user.key;
         }
 
     } catch (e) {
-        return null
+        console.log(e)
     }
 }

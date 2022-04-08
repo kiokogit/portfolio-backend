@@ -9,11 +9,11 @@ export async function register(req, res) {
 
     //check if user exists - although indexing of db using email works still, may fail at times
     try {
-        const exists = await User.findOne({ email })
+        const exists = await User.findByEmail(email);
         if (!exists) {
            
             const hashedPassword = await bcrypt.hash(password, 5);
-            await User.create({ fname, lname, email, password: hashedPassword });
+            await User.create({ credentials: { fname, lname, email, password: hashedPassword }});
 
             res.status(201).send('User registered successfully')
         } else{
@@ -32,10 +32,10 @@ export async function login(req, res) {
     const { email, password } = req.body;
     try {
         //check if user available
-        const user = await User.findOne({email})
+        const user = await User.findByEmail(email)
         if (user) {
             //check password match
-            if (await bcrypt.compare(password, user.password)) {
+            if (await bcrypt.compare(password, user.credentials.password)) {
                 //if passed, generate token
                 const token_key = await gen_user_token(user.id)
 
@@ -72,6 +72,6 @@ export async function logout(req, res) {
             res.status(500).send('No header sent with token')
         }
     } catch (e) {
-        res.status(500).send('There was a problem somewhere')
+        res.status(500).send('There was a problem with the promise')
     }
 }

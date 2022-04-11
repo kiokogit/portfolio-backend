@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { contactSchema, projectSchema, socialSchema, userBioSchema, credentialsSchema } from './user_child_schemas.js';
+import { contactSchema,socialSchema, userBioSchema, credentialsSchema } from './user_child_schemas.js';
 
 const userSchema = new mongoose.Schema({
 
@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
     //children
     user_bio: userBioSchema,
     contacts: contactSchema,
-    projects: projectSchema,
     social_media: socialSchema,
 
 });

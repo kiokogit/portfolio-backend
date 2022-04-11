@@ -12,6 +12,7 @@ export const credentialsSchema = {
     email: { type: String, maxlength: 125, required: true, lowercase: true, unique: true },
     password: { type: String, required: true },
     is_admin: { type: Boolean, default: false },
+    profile_pic:{type:String}
 
 }
 
@@ -30,7 +31,6 @@ export const userBioSchema = {
     relationship_status:{type:String, alias:'status', enum:relationship_status}
     
 }
-
 
 //contacts data
 export const contactSchema = {
@@ -52,22 +52,39 @@ export const socialSchema = {
 }
 
 //projects
-export const projectSchema = {
+const projectSchema = mongoose.Schema({
+
+    project_owner_id: { type: String, required: true, alias: 'user_id' },
     title: { type: String },
     description: { type: String },
     skills: [{ type: String, trim: true }],
-    documentation_link: { type: String, alias: 'docs' },
-    final_link: { type: String, alias: 'link' },
+    project_documentation_link: { type: String, alias: 'docs' },
+    project_final_link: { type: String, alias: 'link' },
     images: [String], //base 64 string rep of images
     date_started: { type: Date },
     completed: { type: Boolean, default: false },
-    date_completed: { type: Date }
+    date_completed: { type: Date },
+    likes: [{ type: Object }],
+    comments: [Object]
+
+}, {timestamps:true});
+export const Project = mongoose.model('project', projectSchema)
+
+//referees
+export const refereeSchema = {
+
+    title:{type: String},
+    full_name: { type: String, required: true },
+    designation: { type: String },
+    company_name: { type: String },
+    company_address: { type: String },
+    phone_number: { type: Number },
+    email: { type: String }
 
 }
 
 //experience
 //education
-//referees
 //hobbies
 //languages
 //awards

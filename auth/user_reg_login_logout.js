@@ -9,13 +9,13 @@ export async function register(req, res) {
 
     //check if user exists - although indexing of db using email works still, may fail at times
     try {
-        const exists = await User.findByEmail(email);
+        const exists = await User.findOne({email:email});
         if (!exists) {
            
             const hashedPassword = await bcrypt.hash(password, 5);
-            await User.create({ credentials: { fname, lname, email, password: hashedPassword }});
+            await User.create({ fname, lname, email, password: hashedPassword });
 
-            res.status(201).send('User registered successfully')
+            res.status(201).send(`User registered successfully. Check your inbox at ${email} for login link`)
         } else{
             res.status(403).send('User with that Email exists')
         };
@@ -32,25 +32,24 @@ export async function login(req, res) {
     const { email, password } = req.body;
     try {
         //check if user available
-        const user = await User.findByEmail(email)
+        const user = await User.findOne({email:email})
         if (user) {
             //check password match
-            if (await bcrypt.compare(password, user.credentials.password)) {
+            if (await bcrypt.compare(password, user.password)) {
                 //if passed, generate token
                 const token_key = await gen_user_token(user.id)
 
-                res.setHeader('authorization', token_key);
-                res.status(200).send('Token generated. Logged in') //everything is okay
+                res.status(200).send(token_key) //everything is okay
             } else {
-                res.status(401).send('Wrong Password') //user known, but unauthenticated. Invalid password
+                res.status(401).send('Invalid Email/Password') //user known, but unauthenticated. Invalid password
             }
         }else{
 
-            res.status(401).send('User Does not exist') // invalid email; return 403 to hide the mistaken credential
+            res.status(401).send('Invalid Email/Password') // invalid email; return 403 to hide the mistaken credential
         }
     } catch (e) {
         console.log(e.message)
-        res.status(401).send('promise fail') // invalid email; return 403 to hide the mistaken credential
+        res.status(401).send('System Error') // invalid email; return 403 to hide the mistaken credential
     }
 };
 

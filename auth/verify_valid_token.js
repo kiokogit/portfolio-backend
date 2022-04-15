@@ -3,9 +3,10 @@ import { del_token } from '../tokens/del_token.js';
 
 export async function verify_token(req, res, next) {
     try {
+        //for personal profile after login
         const key = req.headers['authorization'].split(' ')[1];
 
-        const token = await Token.findOne({ key });
+        const token = await Token.findOne({ key: key });
 
         const rem_time = (new Date().getTime() - (token.expires_at).getTime())
         if (token.is_expired) {
@@ -22,11 +23,10 @@ export async function verify_token(req, res, next) {
         //if not expired or refreshed
         //send token key(to be returned as header to user) //push user id to next()
         function to_next() {
-            res.setHeader('authorization', token.key);
+            // res.setHeader('authorization', token.key);
             req.user_id = token.user_id;
             next()
         }
-
     } catch (e) {
         //user not known, unauthenticated
         console.log(e.message)

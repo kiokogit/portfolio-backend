@@ -9,16 +9,18 @@ export async function change_password(req, res) {
 
     try {
 
-        const user_password = await User.findOne({ id: user_id }, { credentials: { password: 1 }});
-        if (bcrypt.compare(user_password, old_password)) {
-            const changed_password = bcrypt.hash(new_password, 5);
-            await User.updateOne({ id: user_id }, { credentials: { password: changed_password } });
+        const user = await User.findOne({ id: user_id }).lean();
+
+        if (await bcrypt.compare(old_password, user.password)) {
+            const changed_password = await bcrypt.hash(new_password, 5);
+            await User.updateOne({ id: user_id }, {  password: changed_password });
             res.status(200).send('Password Changed successfully')
         } else {
             res.status(403).send('Forbidden Access. Cannot change password');
         };
         
     } catch (e) {
+        console.log(e.message)
         res.status(500).send('Error: Not executed')
     }
 };

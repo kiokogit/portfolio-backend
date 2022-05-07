@@ -1,3 +1,4 @@
+import { GuestToken } from '../models/guest_token_model.js';
 import {Token} from '../models/token_model.js'
 import { del_token } from '../tokens/del_token.js';
 
@@ -33,3 +34,24 @@ export async function verify_token(req, res, next) {
         res.status(401).send('Forbidden. User Not Logged In.')
     }
 }
+
+
+export const verify_guest_token = async (req, res, next) => {
+
+    //guest key is passed in as a param in the guest link;
+    try {
+
+        const { token_key } = req.params;
+        const token = await GuestToken.findOne({ key: token_key });
+        if (token.hits > 5) {
+            res.status(404).send('Page not found');
+        } else {
+            await GuestToken.findByIdAndUpdate(token._id, { $set:{hits:token.hits+1}})
+            req.user_id = token.user_id;
+            next();
+        }
+
+    } catch (e) {
+        res.status(403).send('Forbidden. Wrong key supplied, or expired')
+    }
+};

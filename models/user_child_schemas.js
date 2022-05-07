@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 //projects
 const projectSchema = mongoose.Schema({
 
-    project_owner_id: { type: String, required: true, alias: 'user_id' },
+    project_owner_id: { type: mongoose.SchemaTypes.ObjectId, required: true, alias: 'user_id' },
     title: { type: String, required:true},
     description: { type: String },
     skills: {type:Array},

@@ -1,20 +1,6 @@
 import { Project } from "../models/user_child_schemas.js";
 import { User } from "../models/user_model.js"
 
-//get user profile
-export const get_profile = async (req, res) => {
-
-    const { profile_user_id } = req.params;
-    try {
-        
-        const user = await User.findById(profile_user_id);
-        res.status(200).send(user)
-    } catch (e) {
-        console.log(e.message)
-        res.status(500).send('Could not fetch profile')
-    }
-};
-
 //current user profile
 export const get_current_profile = async(req, res) => {
     const { user_id } = req;
@@ -42,17 +28,6 @@ export const edit_profile = async (req, res) => {
     }
 }
 
-//fetch specified profile details
-export const get_profile_details = async (req, res) => {
-    const { category, user_id } = req.params;
-    try {
-        const profile = await User.findById(user_id);
-        res.status(200).send(profile[category])
-
-    } catch (e) {
-        console.log(e.message)
-    }
-};
 
 //get all profiles
 export const get_all_user_profiles = async (req, res) => {
@@ -66,14 +41,14 @@ export const get_all_user_profiles = async (req, res) => {
 
 //PROJECTS
 export const get_user_projects = async (req, res) => {
-    const { project_owner_id } = req.params
+    const { user_id } = req
     
     try {
-        const projects = await Project.find({ project_owner_id });
+        const projects = await Project.find({project_owner_id:new String(user_id)});
         res.status(200).send(projects);
 
     } catch (e) {
-        console.log(e.message)
+        console.log(e)
     }
 }
 
@@ -91,7 +66,7 @@ export const edit_project = async (req, res) => {
         else res.status(200).send('Project details not changed');
         
     } catch (e) {
-        console.log(e.message);
+        console.log(e);
     }
 };
 
@@ -125,7 +100,7 @@ export const like_comment_projects = async (req, res) => {
         }
 
     } catch (e) {
-        console.log(e.message);   
+        console.log(e);   
         res.status(500).send('Error occurred')
     }
 }

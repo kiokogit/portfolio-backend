@@ -1,5 +1,6 @@
 import { Token } from "../models/token_model.js"
 import { v4 as uuidv4 } from 'uuid';
+import { GuestToken } from "../models/guest_token_model.js";
 
 export const gen_user_token = async(user_id) => {
 
@@ -20,5 +21,20 @@ export const gen_user_token = async(user_id) => {
 
     } catch (e) {
         console.log(e)
+    }
+}
+
+//guest token
+export async function gen_guest_token(user_id) {
+
+    try {
+        const token = await GuestToken.create({
+            key: uuidv4(),
+            user_id: user_id,
+        });
+
+        return token.key;
+    } catch (e) {
+        console.log(e);
     }
 }

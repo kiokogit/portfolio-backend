@@ -32,7 +32,7 @@ export const edit_profile = async (req, res) => {
 //get all profiles
 export const get_all_user_profiles = async (req, res) => {
     try {
-        const profiles = await User.find();
+        const profiles = await User.find()
         res.status(200).send(profiles);
     } catch (e) {
         res.status(404).send(e.message)
@@ -44,7 +44,7 @@ export const get_user_projects = async (req, res) => {
     const { user_id } = req
     
     try {
-        const projects = await Project.find({project_owner_id:new String(user_id)});
+        const projects = await Project.find({user_id:new String(user_id)});
         res.status(200).send(projects);
 
     } catch (e) {
@@ -60,7 +60,7 @@ export const edit_project = async (req, res) => {
     const project_details = req.body
     
     try {
-        const edit = await Project.updateOne({ _id: project_id, project_owner_id: user_id }, project_details);
+        const edit = await Project.updateOne({ _id: project_id, user_id: user_id }, project_details);
         if (edit.acknowledged) res.status(200).send('Project Details Updated');
                     
         else res.status(200).send('Project details not changed');
@@ -112,7 +112,7 @@ export const del_project = async(req, res) => {
     const { project_id } = req.params;
 
     try {
-        await Project.findOneAndRemove({ _id: project_id, project_owner_id:user_id});
+        await Project.findOneAndRemove({ _id: project_id, user_id:user_id});
         res.status(200).send('Project Deleted')
     } catch (e) {
         res.status(500).send('Not deleted')
@@ -122,11 +122,11 @@ export const del_project = async(req, res) => {
 //add a new project
 export const add_project = async (req, res) => {
     const { user_id } = req           //from verify token - project owner id
-    const project_details = req.body
+    const project = req.body
     
     try {
-        const new_project = await Project.create({ project_owner_id: user_id, ...project_details });
-        res.status(201).send(new_project);
+        await Project.create({ user_id: user_id, ...project });
+        res.status(201).send('Project Created Successfully');
         
     } catch (e) {
         console.log(e.message)
@@ -134,4 +134,3 @@ export const add_project = async (req, res) => {
     }
 };
 
-//Search querries

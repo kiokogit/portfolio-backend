@@ -4,13 +4,13 @@ import mongoose from 'mongoose';
 //projects
 const projectSchema = mongoose.Schema({
 
-    project_owner_id: { type: mongoose.SchemaTypes.ObjectId, required: true, alias: 'user_id' },
+    user_id: { type: mongoose.SchemaTypes.ObjectId, required: true, ref:'user' },
     title: { type: String, required:true},
     description: { type: String },
     skills: {type:Array},
     project_documentation_link: { type: String, alias: 'docs' },
     project_final_link: { type: String, alias: 'link' },
-    images: {type:Array}, //base 64 string rep of images
+    gallery: [String], //base 64 string rep of images
     date_started: { type: Date },
     completed: { type: Boolean, default: false },
     date_completed: { type: Date },

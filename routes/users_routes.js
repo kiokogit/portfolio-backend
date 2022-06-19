@@ -20,7 +20,7 @@ router.patch('/profile/edit', verify_token, edit_profile);
 
 //projects - resume
 //by the projects owner
-router.post('/profile/projects/add', verify_token, add_project);
+router.post('/projects/add', verify_token, add_project);
 router.delete('/profile/projects/del/:project_id', verify_token, del_project);
 router.patch('/profile/projects/edit/:project_id',verify_token, edit_project);
 router.patch('/profile/projects/:action_type/:project_id', verify_token, like_comment_projects);
@@ -28,7 +28,7 @@ router.patch('/profile/projects/:action_type/:project_id', verify_token, like_co
 router.get('/projects',verify_token, get_user_projects);
 
 //GUEST RETRIEVALS
-router.get('/:profile_user_id', get_guest_data);
+// router.get('/:profile_user_id', get_guest_data);
 router.get('/profiles/all', get_all_user_profiles);
 router.get('/profile/:category/:user_id', get_profile_details);
 

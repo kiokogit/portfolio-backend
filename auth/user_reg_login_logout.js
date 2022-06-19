@@ -15,6 +15,7 @@ export async function register(req, res) {
            
             const hashedPassword = await bcrypt.hash(password, 5);
             await User.create({ username, fname, lname, email, password: hashedPassword });
+            //send email verification
 
             res.status(201).send(`User registered successfully. Check your inbox at ${email} for login link`)
         } else if(email_exists){

@@ -46,8 +46,13 @@ export async function login(req, res) {
             if (await bcrypt.compare(password, user.password)) {
                 //if passed, generate token
                 const token_key = await gen_user_token(user.id)
+                if(token_key===0 || !token_key){
+                    res.status(403).send('System Error. User cannot be logged in')
+                }else{
 
-                res.status(200).send({token: token_key, id:user._id}) //everything is okay
+                    res.status(200).send({token: token_key, id:user._id}) //everything is okay
+                }
+
             } else {
                 res.status(401).send('Invalid Email/Username/Password') //user known, but unauthenticated. Invalid password
             }

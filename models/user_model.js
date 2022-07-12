@@ -51,7 +51,15 @@ const userSchema = new mongoose.Schema({
 
 });
 
-userSchema.virtual('fullname', function(){
-    return this.fname+' '+this.lname
+userSchema.method('findByUsernameOrEmail', function(user, by){
+    if(by==='email'){
+        return this.findOne({email:user})
+    } else if(by==='username'){
+        return this.findOne({username:user})
+    }
 })
+
+//help search from all fields
+userSchema.index({"$**":"text"});
+
 export const User = mongoose.model('user', userSchema);

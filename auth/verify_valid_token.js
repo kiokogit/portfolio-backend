@@ -3,15 +3,19 @@ import 'dotenv/config'
 
 export async function verify_token(req, res, next) {
     try {
-        //for personal profile after login
+        //for personal profile after login - bearer token
         const key = req.headers['authorization'].split(' ')[1];
 
         jwt.verify(key, process.env.JWTSECRET, (err, decoded)=>{
             if(err){
-                console.log(err)
-                res.status(403).send('Session expired! login again')
-            }else{
-                req.user_id = decoded
+                let message = err.message
+                if(err.name==="TokenExpiredError") message = 'Session expired! login again'
+                if(err.name==="JsonWebTokenError") message = 'Session auth failed. login again'
+                
+                console.log(err.message)
+                res.status(403).send(message)
+            } else {
+                req.user_id = decoded.user_id
                 next()
             }
         })

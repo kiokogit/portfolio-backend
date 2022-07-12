@@ -8,5 +8,5 @@ export default function appMiddleware(app) {
     app.use(bodyParser.json({extended:true, limit:'30mb'}));
     app.use(bodyParser.urlencoded({extended:true, limit:'30mb'}))
     app.use(cookieParser())
-    app.use('/', router);
+    app.use('/', router)
 }

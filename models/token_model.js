@@ -1,3 +1,5 @@
+/* //NOT IN USE
+
 import mongoose from 'mongoose';
 
 // token generated every login, deleted every logout or if found as expired
@@ -25,4 +27,4 @@ sessionTokenSchema.virtual('is_expired').get(function () {
     }
 });
 
-export const Token = mongoose.model('token', sessionTokenSchema);
+export const Token = mongoose.model('token', sessionTokenSchema); */

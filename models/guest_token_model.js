@@ -1,4 +1,7 @@
-import mongoose from "mongoose";
+
+//NOT IN USE
+
+/* import mongoose from "mongoose";
 
 //generated when a user;;;
 
@@ -8,6 +11,6 @@ const guestTokenSchema = new mongoose.Schema({
     key: { type: String, required: true },
     hits: { type: Number, default: 0}
 
-}, { timestamps: true });
+}, { timestamps: true });/*  */
 
-export const GuestToken = mongoose.model('guest_token', guestTokenSchema);
+// export const GuestToken = mongoose.model('guest_token', guestTokenSchema); */

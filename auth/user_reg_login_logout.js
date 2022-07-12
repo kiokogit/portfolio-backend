@@ -11,13 +11,18 @@ export async function register(req, res) {
     try {
         const email_exists = await User.findOne({email:email});
         const username_exists = await User.findOne({username:username});
+        // const email_exists = await User.findByUsernameOrEmail('email',email)
+        // const username_exists = await User.findByUsernameOrEmail('username',username)
         if (!email_exists && !username_exists) {
            
             const hashedPassword = await bcrypt.hash(password, 5);
             await User.create({ username, fname, lname, email, password: hashedPassword });
             //send email verification
 
-            res.status(201).send(`User registered successfully. Check your inbox at ${email} for login link`)
+            //CAN REDIRECT TO LOGIN
+            res.redirect(200, 'http://localhost:5000/user/login')
+
+
         } else if(email_exists){
             res.status(403).send('User with that Email exists')
         } else {
@@ -34,6 +39,9 @@ export async function register(req, res) {
 export async function login(req, res) {
 
     const { email, username, password } = req.body;
+    /* if(!password || !(!username || !email)) {
+        res.status(400).send("Invalid/missing arguments")
+    } //BAD REQUEST */
     try {
         //check if user available
         let user;
@@ -49,8 +57,9 @@ export async function login(req, res) {
                 if(token_key===0 || !token_key){
                     res.status(403).send('System Error. User cannot be logged in')
                 }else{
-
-                    res.status(200).send({token: token_key, id:user._id}) //everything is okay
+                    //send token as header
+                    res.setHeader('x-auth', token_key)
+                    res.status(200).send('User logged in Successfully') //everything is okay
                 }
 
             } else {

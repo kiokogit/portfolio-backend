@@ -32,14 +32,18 @@ export const get_profile_details = async (req, res) => {
 
 export const search_profiles = async (req, res) => {
     const { q } = req.query;
+    if(!q) res.status(200).send('Enter valid query')
     try {
-        const user = await User
-            .find({ $or: [{ username: { $regex: q } }, { fname: { $regex: q } }, { lname: { $regex: q } }] })
+        
+        const users = await User
+            //searching from all fields - using createIndex function
+            // can also use: { $or: [{ username: { $regex: q } }, { fname: { $regex: q } }, { lname: { $regex: q } }] }
+            .find({$text:{ $search: q}})
             .sort({ 'username': 1 })
             .select({ fname: 1, lname: 1, username: 1 })
             .limit(10)
-            
-        res.status(200).send(user)
+        
+        res.status(200).send(users)
 
     } catch (e) {
         console.log(e)

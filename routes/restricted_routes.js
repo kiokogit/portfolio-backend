@@ -17,8 +17,8 @@ router.patch('/profile/edit', edit_profile);
 //projects - resume
 //by the projects owner
 router.post('/projects/add', add_project);
-router.delete('/profile/projects/del/:project_id', del_project);
-router.patch('/profile/projects/edit/:project_id', edit_project);
+router.delete('/projects/del/:project_id', del_project);
+router.patch('/projects/edit/:project_id', edit_project);
 //like and comments can be done by anyone
 router.patch('/profile/projects/:action_type/:project_id', like_comment_projects);
 

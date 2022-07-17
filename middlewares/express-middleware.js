@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieParser from 'cookie-parser';
 
 export default function appMiddleware(app) {
-    app.use(cors())
+    app.use(cors({exposedHeaders: 'authorization'}))
     app.use(bodyParser.json({extended:true, limit:'30mb'}));
     app.use(bodyParser.urlencoded({extended:true, limit:'30mb'}))
     app.use(cookieParser())

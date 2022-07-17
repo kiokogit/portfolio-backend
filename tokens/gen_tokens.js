@@ -2,11 +2,11 @@ import 'dotenv/config'
 import jwt from 'jsonwebtoken';
 
 export const gen_user_token = async(user_id) => {
-
-    //find token with that Id:
+    //sign token with that Id:
     try{
 
-        const token = jwt.sign({user_id: user_id}, process.env.JWTSECRET, {expiresIn:50})
+        const token = jwt.sign({user_id: user_id}, process.env.JWTSECRET)
+        
         return token
 
     } catch(e) {

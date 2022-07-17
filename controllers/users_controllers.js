@@ -4,31 +4,29 @@ import { User } from "../models/user_model.js"
 //current user profile
 export const get_current_profile = async(req, res) => {
     const { user_id } = req;
+
     try {
         const user = await User.findById(user_id)
                                 .select({password:0});
         res.status(200).send(user)
         
     } catch (e) {
+        console.log(e)
         res.status(500).send('Cannot fetch user profile')
     }
 }
 //edit profile
 export const edit_profile = async (req, res) => {
+    
     const { user_id } = req
     const body = req.body //only the details to be updated as json
     try {
         //update
         await User.findByIdAndUpdate(user_id, body)
-        //user_updated = {"acknowledged":Boolean}; returns true if at least one item has been edited
-        //return edited profile?
-        //what if it can return only the updated part?
-        //WHAT IF WE JUST REDIRECT TO Profile ROUTE
-        res.redirect('http://localhost:5000/user/auth/profile/get_current')
-        res.end;
+        res.status(200).send('Profile edited successfully')
     } catch (e) {
         console.log(e.message)
-        res.status(500).send('System Error. Profile update failed')
+        res.status(400).send('Bad Request. Profile update failed')
     }
 }
 
@@ -61,12 +59,12 @@ export const get_user_projects = async (req, res) => {
 //get first 3 projects(for brief show of thumbnails and title)
 export const projects_in_brief = async(req, res) =>{
    const {user_id} = req
-   const {n} = req.query
+   const n = 3/* req.query */
    
    try {
         const projects = await Project
                             .find({user_id:new String(user_id)})
-                            .select({title:1})
+                            .select({title:1, gallery:1})
                             .limit(n)
                             .sort("-updatedAt")
 
@@ -100,9 +98,11 @@ export const edit_project = async (req, res) => {
     
     try {
         const edit = await Project.updateOne({ _id: project_id, user_id: user_id }, project_details);
-        if (edit.acknowledged) res.status(200).send('Project Details Updated');
-                    
-        else res.status(200).send('Project details not changed');
+        if (edit.acknowledged){
+             res.status(200).send('Project Details Updated')
+            }else {
+                res.status(200).send('Project details not changed')
+            };
         
     } catch (e) {
         console.log(e);

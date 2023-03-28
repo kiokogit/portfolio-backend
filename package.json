@@ -22,7 +22,7 @@
   },
   "scripts": {
     "test": "npm test",
-    "start": "nodemon npm run start"
+    "start": "npm run start"
   },
   "repository": {
     "type": "git",
